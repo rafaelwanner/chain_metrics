@@ -19,8 +19,9 @@ def assembleScript(scriptData):
     else:
         lockingScript = scriptData
 
+    unlockingScript = scriptData['unlockingScript']
 
-    return lockingScript
+    return unlockingScript, lockingScript
 
 
 if __name__=="__main__":
