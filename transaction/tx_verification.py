@@ -41,9 +41,9 @@ def fetchScript(input):
     outpointIndex = input[64:72]
     #input = input[72:]
     scriptLength, input = readVarInt(input[72:])
-    unlockingScript = input[:scriptLength]
+    unlockingScript = input[:2*scriptLength]
     #input = input[scriptLength:]
-    seqNo, input = readIntLittleEndian(input[scriptLength:])
+    seqNo, input = readIntLittleEndian(input[2*scriptLength:])
 
     data = utxo_data(outpointTXID, outpointIndex)
 
@@ -62,8 +62,8 @@ def get_scripts(transaction):
     
     for inputIndex in range(0, inputCount):
         scriptData, transaction = fetchScript(transaction)
-        script = assembleScript(scriptData)
-        scripts.append(script)
+        unlocking, locking = assembleScript(scriptData)
+        scripts.append([unlocking, locking])
 
     return scripts
 
@@ -72,7 +72,7 @@ def get_scripts(transaction):
 def tx_verification(transaction):
     
     scripts = get_scripts(bytearray(transaction, 'utf-8'))
-    
+    return scripts
     """ TODO: Write script exection
     engine = ScriptEngine()
     for script in scripts:
