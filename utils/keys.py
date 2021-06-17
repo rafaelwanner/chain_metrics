@@ -22,7 +22,7 @@ def uncompressPublicKey(compressed_pk):
 
     # Compute y
     y_square = (pow(x, 3, p) + 7) % p
-    y_square_square_root = pow(y_square, (p + 1) / 4, p)
+    y_square_square_root = pow(y_square, int((p + 1) / 4), p)
 
     # Chose the proper y depending on the prefix and whether the computed square root is odd or even
     if prefix == "02" and y_square_square_root & 1 or prefix == "03" and not y_square_square_root & 1:
@@ -31,6 +31,6 @@ def uncompressPublicKey(compressed_pk):
         y = y_square_square_root
 
     # Construct the uncompressed pk
-    uncompressed_pk = "04" + x_hex + format(y, '064x')
+    uncompressed_pk = "04" + x_hex.decode("utf-8") + format(y, '064x')
 
     return bytearray(uncompressed_pk, 'utf-8')
